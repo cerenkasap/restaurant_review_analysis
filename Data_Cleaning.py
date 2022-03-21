@@ -25,7 +25,54 @@ plt.tight_layout()
 plt.savefig('images/length_of_reviews.png')
 plt.show()
 
+#Preprocessing
 
+#Function to remove Punctuation
+def remove_punct(text):
+    text_nopunct = "".join([char for char in text if char not in string.punctuation])# It will discard all punctuations
+    return text_nopunct
+
+df['Review']  = df['Review'].apply(lambda x: remove_punct(x))
+
+# Function to Tokenize words
+def tokenize(text):
+    tokens = re.split('\W+', text) #W+ means that either a word character (A-Za-z0-9_) or a dash (-) can go there.
+    return tokens
+
+#We convert to lower as Python is case-sensitive. 
+df['Review'] = df['Review'].apply(lambda x: tokenize(x.lower())) 
+
+# All English Stopwords
+stopword = nltk.corpus.stopwords.words('english')
+
+# Function to remove Stopwords
+def remove_stopwords(tokenized_list):
+    text = [word for word in tokenized_list if word not in stopword]# To remove all stopwords
+    return text
+
+df['Review'] = df['Review'].apply(lambda x: remove_stopwords(x))
+
+#Stemming
+ps = nltk.PorterStemmer()
+
+def stemming(tokenized_text):
+    text = [ps.stem(word) for word in tokenized_text]
+    return text
+
+df['Review'] = df['Review'].apply(lambda x: stemming(x))
+
+#Lemmatizer
+wn = nltk.WordNetLemmatizer()
+
+def lemmatizing(tokenized_text):
+    text = [wn.lemmatize(word) for word in tokenized_text]
+    return text
+
+df['Review'] = df['Review'].apply(lambda x: lemmatizing(x))
+
+
+
+'''
 #Text Cleaning
 def Text_Cleaning(Text):    
     # Lowercase the texts
@@ -62,11 +109,13 @@ def Text_Processing(Text):
     # powerful, we will only omit the word `not` from the list of stopwords
 
     for word in Tokens:
-        if word not in Stopwords:            
-            Processed_Text.append(Lemmatizer.lemmatize(word))            
+            Processed_Text.append(Lemmatizer.lemmatize(word))
     return(" ".join(Processed_Text))
 
 #Apply the functions
 df['Review'] = df['Review'].apply(Text_Cleaning).apply(Text_Processing)
 
+
+df. dropna()'''
 df.to_csv('rest_review_data_cleaned.csv', index=False)
+a=df.isnull().sum()
