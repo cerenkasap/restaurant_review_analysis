@@ -7,6 +7,8 @@ Pulled over **1000 examples** from Kaggle using pandas and opendatasets librarie
 
 Python version: *Python 3.7.11* 
 
+Packages: *pandas, opendatasets, seaborn, matplotlib, numpy, nltk, wordcloud, collections, imblearn.over_sampling, re, string and textblob*
+
 ### Resources Used
 
 [The dataset from Kaggle](https://www.kaggle.com/d4rklucif3r/restaurant-reviews)
