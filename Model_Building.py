@@ -76,7 +76,6 @@ print("Best Parameters:", best_parameters)
 #Best Model
 Classifier = SVC(C = 10, gamma=1, kernel = 'rbf')
 Classifier.fit(X_tfidf_train, y_tfidf_train)
-
 Prediction = Classifier.predict(X_tfidf_test)
 
 #Metrics
