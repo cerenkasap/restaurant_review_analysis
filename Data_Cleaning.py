@@ -22,7 +22,7 @@ plt.title("Amount of Reviews", pad = 20)
 plt.xlabel("Liked", labelpad = 15)
 plt.ylabel("Amount of Reviews",labelpad = 20)
 plt.tight_layout()
-plt.savefig('images/length_of_reviews.png')
+plt.savefig('images/l_of_reviews.png')
 plt.show()
 
 #Preprocessing
