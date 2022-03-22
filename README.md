@@ -11,7 +11,7 @@ Python version: *Python 3.7.11*
 
 [The dataset from Kaggle](https://www.kaggle.com/d4rklucif3r/restaurant-reviews)
 
-[Functions for Text Data Cleaning] (https://github.com/BadreeshShetty/Natural-Language-Processing-NLP-for-Machine-Learning/blob/master/NLP.ipynb)
+[Functions for Text Data Cleaning](https://towardsdatascience.com/natural-language-processing-nlp-for-machine-learning-d44498845d5b)
 
 ## Data Collection
 Used Kaggle to pull the datasets 5842 books with 2 columns:
