@@ -49,10 +49,10 @@ def tokenize(text):
 #We convert to lower as Python is case-sensitive. 
 df['Review_cleaned']  = df['Review_cleaned'] .apply(lambda x: tokenize(x.lower())) 
 
+# Function to remove Stopwords
 # All English Stopwords
 stopword = nltk.corpus.stopwords.words('english')
 
-# Function to remove Stopwords
 def remove_stopwords(tokenized_list):
     text = [word for word in tokenized_list if word not in stopword]# To remove all stopwords
     return text
@@ -68,5 +68,5 @@ def lemmatizing(tokenized_text):
 
 df['Review_cleaned']  = df['Review_cleaned'] .apply(lambda x: lemmatizing(x))
 
+#Save the cleaned dataset
 df.to_csv('rest_review_data_cleaned.csv', index=False)
-a=df.isnull().sum()
