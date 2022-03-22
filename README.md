@@ -17,6 +17,8 @@ Used Kaggle to pull the datasets 5842 books with 2 columns:
 * Review             
 * Liked            
 
+![alt text](https://github.com/cerenkasap/restaurant_review_analysis/blob/master/images/l_of_reviews.png "Length of Reviews on Raw Data")
+
 
 ## Data Cleaning
 
