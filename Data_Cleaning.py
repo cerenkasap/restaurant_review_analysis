@@ -27,25 +27,16 @@ plt.show()
 
 #Preprocessing
 
-#Lowercase the texts
-def lowercase_text(text):
-    text=text.lower()
-    return text
-
-df['Review_cleaned']  = df['Review'].apply(lambda x: lowercase_text(x))
-
 #Function to remove Punctuation
 def remove_punct(text):
     text_nopunct = "".join([char for char in text if char not in string.punctuation])# It will discard all punctuations
     return text_nopunct
-
-df['Review_cleaned']  = df['Review_cleaned'].apply(lambda x: remove_punct(x))
+df['Review_cleaned']  = df['Review'].apply(lambda x: remove_punct(x))
 
 # Function to Tokenize words
 def tokenize(text):
     tokens = re.split('\W+', text) #W+ means that either a word character (A-Za-z0-9_) or a dash (-) can go there.
     return tokens
-
 #We convert to lower as Python is case-sensitive. 
 df['Review_cleaned']  = df['Review_cleaned'] .apply(lambda x: tokenize(x.lower())) 
 
@@ -56,7 +47,6 @@ stopword = nltk.corpus.stopwords.words('english')
 def remove_stopwords(tokenized_list):
     text = [word for word in tokenized_list if word not in stopword]# To remove all stopwords
     return text
-
 df['Review_cleaned'] = df['Review_cleaned'] .apply(lambda x: remove_stopwords(x))
 
 #Lemmatizer
@@ -65,7 +55,6 @@ wn = nltk.WordNetLemmatizer()
 def lemmatizing(tokenized_text):
     text = [wn.lemmatize(word) for word in tokenized_text]
     return text
-
 df['Review_cleaned']  = df['Review_cleaned'] .apply(lambda x: lemmatizing(x))
 
 #Save the cleaned dataset
