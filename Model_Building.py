@@ -16,6 +16,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+from sklearn.model_selection import RepeatedStratifiedKFold
+
 
 #pull the cleaned data
 df = pd.read_csv('rest_review_data_cleaned.csv')
@@ -53,30 +55,37 @@ Models = [dt, lr, svc, rf, Bayes, KNN]
 Models_Dict = {0: "Decision Tree", 1: "Logistic Regression", 2: "SVC", 3: "Random Forest", 4: "Naive Bayes", 5: "K-Neighbors"}
 
 for i, model in enumerate(Models):
-  print("{} Test Accuracy in Bag of Words: {}".format(Models_Dict[i], cross_val_score(model, X_bag, y, cv = 10, scoring = "accuracy").mean()))
-  print("{} Test Accuracy in TF-IDF: {}".format(Models_Dict[i], cross_val_score(model, X_tfidf, y, cv = 10, scoring = "accuracy").mean()))
-  print("{} Test Accuracy in N-gram: {}".format(Models_Dict[i], cross_val_score(model, X_ngram, y, cv = 10, scoring = "accuracy").mean()))
+  print("{} Accuracy with Bag of Words data: {}".format(Models_Dict[i], cross_val_score(model, X_bag_train, y_bag_train, cv = 10, scoring = "accuracy").mean()))
+  print("{} Accuracy with TF-IDF data: {}".format(Models_Dict[i], cross_val_score(model, X_tfidf_train, y_tfidf_train, cv = 10, scoring = "accuracy").mean()))
+  print("{} Accuracy with N-gram data: {}".format(Models_Dict[i], cross_val_score(model, X_ngram_train, y_ngram_train, cv = 10, scoring = "accuracy").mean()))
 
 #Hyperparamater Tuning
-# defining parameter range
-param_grid = {'C': [0.1, 1, 10, 100, 1000],
-              'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
-              'kernel': ['rbf']}
- 
-grid = GridSearchCV(svc, param_grid, refit = True, verbose = 3)
+#define the parameters
+param_grid_lr = {
+    'max_iter': [20, 50, 100, 200, 500, 1000],                      
+    'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],   
+    'class_weight': ['balanced']}
+
+grid_search=GridSearchCV(estimator=LogisticRegression(random_state=42), param_grid=param_grid_lr, verbose=1, cv=10, n_jobs=-1)
+    
  
 # fitting the model for grid search
-grid.fit(X_tfidf_train, y_tfidf_train)
-best_accuracy = grid.best_score_
-best_parameters = grid.best_params_
-
+grid_search.fit(X_tfidf_train, y_tfidf_train)
+best_accuracy = grid_search.best_score_
+best_parameters = grid_search.best_params_
+best_estimator = grid_search.best_estimator_
 print("Best Accuracy: {:.2f} %".format(best_accuracy*100))
 print("Best Parameters:", best_parameters)
+print("Best Estimator:", best_estimator)
 
 #Best Model
-Classifier = SVC(C = 10, gamma=1, kernel = 'rbf')
+'''Classifier = LogisticRegression(class_weight='balanced', max_iter=20, random_state=42,
+                   solver='newton-cg')
 Classifier.fit(X_tfidf_train, y_tfidf_train)
-Prediction = Classifier.predict(X_tfidf_test)
+'''
+Prediction = grid_search.predict(X_tfidf_test)
+print('Test Accuracy: ', grid_search.score(X_tfidf_test, y_tfidf_test))
+
 
 #Metrics
 accuracy_score(y_tfidf_test, Prediction)
@@ -114,3 +123,5 @@ def plot_cm(cm, classes, title, normalized = False, cmap = plt.cm.BuPu):
 plot_cm(ConfusionMatrix, classes = ["Positive", "Negative"], title = "Confusion Matrix of Sentiment Analysis")
 plt.tight_layout()
 plt.savefig('images/confusion_matrix.png', dpi=300)
+
+print(classification_report(y_tfidf_test, Prediction))
